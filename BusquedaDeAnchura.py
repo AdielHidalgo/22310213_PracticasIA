@@ -1,26 +1,28 @@
-from collections import deque
+from collections import deque  # Importamos deque para usar una cola eficiente (FIFO)
 
 def bfs(grafo, inicio, objetivo):
-    visitados = set()
-    cola = deque([[inicio]])  # Cola con caminos, no solo nodos
+    visitados = set()  # Conjunto para llevar registro de los nodos ya visitados
+    cola = deque([[inicio]])  # Creamos la cola con una lista que contiene solo el nodo inicial
 
-    while cola:
-        camino = cola.popleft()  # Sacamos el primer camino
-        nodo = camino[-1]  # Último nodo del camino
+    while cola:  # Mientras haya caminos por explorar en la cola
+        camino = cola.popleft()  # Sacamos el primer camino de la cola (FIFO)
+        nodo = camino[-1]  # Tomamos el último nodo del camino (el nodo actual)
 
         if nodo == objetivo:
-            return camino  # Regresamos el camino si llegamos al objetivo
+            return camino  # Si llegamos al objetivo, regresamos el camino completo
 
-        if nodo not in visitados:
-            visitados.add(nodo)
+        if nodo not in visitados:  # Si no hemos visitado este nodo
+            visitados.add(nodo)  # Lo marcamos como visitado
+
+            # Recorremos todos los vecinos del nodo actual
             for vecino in grafo.get(nodo, []):
-                nuevo_camino = list(camino)
-                nuevo_camino.append(vecino)
-                cola.append(nuevo_camino)
+                nuevo_camino = list(camino)  # Copiamos el camino actual
+                nuevo_camino.append(vecino)  # Añadimos el vecino al nuevo camino
+                cola.append(nuevo_camino)  # Guardamos este nuevo camino en la cola
 
-    return None  # Si no se encuentra el objetivo
+    return None  # Si terminamos el ciclo sin encontrar el objetivo, regresamos None
 
-# Grafo de ejemplo
+# Definimos un grafo como diccionario de listas (adyacencias)
 grafo = {
     'A': ['B', 'C'],
     'B': ['D', 'E'],
@@ -30,9 +32,12 @@ grafo = {
     'F': []
 }
 
-# Prueba del algoritmo
+# Datos de entrada para la búsqueda
 inicio = 'A'
 objetivo = 'F'
+
+# Ejecutamos la función BFS
 resultado = bfs(grafo, inicio, objetivo)
 
+# Mostramos el camino encontrado
 print("Camino encontrado:", resultado)
